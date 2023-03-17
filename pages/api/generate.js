@@ -51,7 +51,7 @@ export default async function (req, res) {
 }
 
 function generatePrompt(article) {
-  return `Summarise this article:
+  return `Summarise this article in 3 to 4 bullet points:
 
 ${article}`
 }
