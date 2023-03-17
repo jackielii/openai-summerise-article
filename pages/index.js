@@ -1,58 +1,78 @@
-import Head from "next/head";
-import { useState } from "react";
-import styles from "./index.module.css";
+import Head from 'next/head'
+import { useState } from 'react'
+
+import styles from './index.module.css'
 
 export default function Home() {
-  const [animalInput, setAnimalInput] = useState("");
-  const [result, setResult] = useState();
+  const [articleInput, setArticleInput] = useState('')
+  const [result, setResult] = useState()
+  const [loading, setLoading] = useState(false)
 
   async function onSubmit(event) {
-    event.preventDefault();
+    setLoading(true)
+    event.preventDefault()
     try {
-      const response = await fetch("/api/generate", {
-        method: "POST",
+      const response = await fetch('/api/generate', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ animal: animalInput }),
-      });
+        body: JSON.stringify({ article: articleInput }),
+      })
 
-      const data = await response.json();
+      const data = await response.json()
+      setLoading(false)
       if (response.status !== 200) {
-        throw data.error || new Error(`Request failed with status ${response.status}`);
+        throw (
+          data.error ||
+          new Error(`Request failed with status ${response.status}`)
+        )
       }
 
-      setResult(data.result);
-      setAnimalInput("");
-    } catch(error) {
+      setResult(data.result)
+    } catch (error) {
+      setLoading(false)
       // Consider implementing your own error handling logic here
-      console.error(error);
-      alert(error.message);
+      console.error(error)
+      alert(error.message)
     }
   }
 
   return (
     <div>
       <Head>
-        <title>OpenAI Quickstart</title>
-        <link rel="icon" href="/dog.png" />
+        <title>Generate Summary</title>
+        <link rel="icon" href="/centrum-256x256.png" />
       </Head>
 
       <main className={styles.main}>
-        <img src="/dog.png" className={styles.icon} />
-        <h3>Name my pet</h3>
-        <form onSubmit={onSubmit}>
-          <input
-            type="text"
-            name="animal"
-            placeholder="Enter an animal"
-            value={animalInput}
-            onChange={(e) => setAnimalInput(e.target.value)}
+        <nav>
+          <header>
+            <img src="/centrum-256x256.png" className={styles.icon} />
+          </header>
+          <span>
+            <h1>Generate Summary</h1>
+          </span>
+        </nav>
+        <section className={styles.content}>
+          <form onSubmit={onSubmit}>
+            <textarea
+              type="text"
+              name="article"
+              placeholder="Paste your article here"
+              value={articleInput}
+              onChange={(e) => setArticleInput(e.target.value)}
+            />
+            <input type="submit" disabled={loading} value="Generate" />
+          </form>
+          <textarea
+            disabled
+            className={styles.result}
+            placeholder="Summary will appear here..."
+            value={loading ? 'Loading...' : result}
           />
-          <input type="submit" value="Generate names" />
-        </form>
-        <div className={styles.result}>{result}</div>
+        </section>
       </main>
     </div>
-  );
+  )
 }
