@@ -66,16 +66,16 @@ export default function Home() {
               placeholder="Paste your article here"
               value={articleInput}
               onChange={(e) => setArticleInput(e.target.value)}
-              onBlur={() => setShowResult(true)}
               onFocus={() => setShowResult(false)}
             />
             <input type="submit" disabled={loading} value="Generate" />
           </form>
           <textarea
-            disabled
+            readOnly
             className={clsx(styles.result, showResult && styles.show)}
             placeholder="Summary will appear here..."
             value={loading ? 'Loading...' : result}
+            onFocus={() => setShowResult(true)}
           />
         </section>
       </main>
