@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@vercel/analytics": "^0.1.11",
     "clsx": "^1.2.1",
     "next": "^13.1.1",
     "openai": "^3.1.0",
